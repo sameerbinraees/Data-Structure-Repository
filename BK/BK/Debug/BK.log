@@ -1,0 +1,5 @@
+﻿  MyForm.cpp
+c:\users\samee\documents\visual studio 2017\projects\bk\bk\MyForm.h(488): warning C4018: '<': signed/unsigned mismatch
+c:\users\samee\documents\visual studio 2017\projects\bk\bk\MyForm.h(586): warning C4018: '<=': signed/unsigned mismatch
+  .NETFramework,Version=v4.6.2.AssemblyAttributes.cpp
+  BK.vcxproj -> C:\Users\samee\Documents\Visual Studio 2017\Projects\BK\Debug\BK.exe
