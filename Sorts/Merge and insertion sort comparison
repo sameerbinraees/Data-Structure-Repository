@@ -1,0 +1,163 @@
+#include "stdafx.h"
+#include<iostream>
+#include<fstream>
+#include <sstream>
+#include<string>
+#include"time.h"
+#define SIZE 100000
+using namespace std;
+
+
+void Merge(int *a, int low, int high, int mid)
+{
+	int i, j, k, *temp=0;
+	temp = new int[high - low + 1];
+	i = low;
+	k = 0;
+	j = mid + 1;
+
+	while (i <= mid && j <= high)
+	{
+		if (a[i] < a[j])
+		{
+			temp[k] = a[i];
+			k++;
+			i++;
+		}
+		else
+		{
+			temp[k] = a[j];
+			k++;
+			j++;
+		}
+	}
+
+	
+	while (i <= mid)
+	{
+		temp[k] = a[i];
+		k++;
+		i++;
+	}
+
+	while (j <= high)
+	{
+		temp[k] = a[j];
+		k++;
+		j++;
+	}
+
+
+	for (i = low; i <= high; i++)
+	{
+		a[i] = temp[i - low];
+	}
+}
+
+void MergeSort(int *a, int l, int r)
+{
+	int mid;
+	if (l < r)
+	{
+		mid = (l + r) / 2;
+		MergeSort(a, l, mid);		
+		MergeSort(a, mid + 1, r);
+		Merge(a,l, r,mid);
+	}
+}
+
+
+void insertion_sort(int a[], int n)
+{
+	int i, key, j;
+	for (i = 1; i < n; i++)
+	{
+		key = a[i];
+		j = i - 1;
+		while (j >= 0 && a[j] > key)
+		{
+			a[j + 1] = a[j];
+			j = j - 1;
+		}
+		a[j + 1] = key;
+	}
+}
+
+
+int main()
+{
+	clock_t start, end;
+	float total;
+	string data;
+	int arr[SIZE] = {};
+	int arr1[SIZE] = {};
+	int x;
+
+	ifstream A("A.txt");
+	for (int i = 0; i < SIZE ;i++) {
+		A >> data;
+		x = stoi(data);
+		arr[i]=x;
+		arr1[i] = x;
+	}
+	A.close();
+	start = clock();
+	insertion_sort(arr,SIZE);
+	end = clock();
+	total = (end - start) / CLOCKS_PER_SEC;
+	cout << "Ascending array in INSERTION SORT is sorted in: "<<total<< "s"<<endl;
+	
+	
+	start = clock();
+	MergeSort(arr1,0, SIZE - 1);
+	end = clock();
+	total = (end - start) / CLOCKS_PER_SEC;
+	cout << "Ascending array in MERGE SORT is sorted in: " << total << "s" << endl<<endl;
+	
+
+
+	ifstream R("R.txt");
+	for (int i = 0; i < SIZE;++i) {
+		R >> data;
+		x = stoi(data);
+		arr[i] = x;
+		arr1[i] = x;
+	}
+	R.close();
+
+	start = clock();
+	insertion_sort(arr, SIZE);
+	end = clock();
+	total = (end - start) / CLOCKS_PER_SEC;
+	cout << "Random array was sorted in: "<<total<< "s"<<endl;
+
+	start = clock();
+	MergeSort(arr1, 0, SIZE - 1);
+	end = clock();
+	total = (end - start) / CLOCKS_PER_SEC;
+	cout << "Random array in MERGE SORT is sorted in: " << total << "s" << endl<<endl;
+
+	ifstream D("D.txt");
+	for (int i = 0; i < SIZE; ++i) {
+		D >> data;
+		x = stoi(data);
+		arr[i] = x;
+		arr1[i] = x;
+
+	}
+	D.close();
+	
+	start = clock();
+	insertion_sort(arr, SIZE);
+	end = clock();
+	total = (end - start) / CLOCKS_PER_SEC;
+	cout << "Descending array was sorted in: " << total << "s"<<endl;
+
+	start = clock();
+	MergeSort(arr1, 0, SIZE - 1);
+	end = clock();
+	total = (end - start) / CLOCKS_PER_SEC;
+	cout << "Descending array in MERGE SORT is sorted in: " << total << "s" << endl<<endl;
+
+    return 0;
+}
