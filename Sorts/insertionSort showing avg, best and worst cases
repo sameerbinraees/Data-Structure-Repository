@@ -1,0 +1,71 @@
+#include "stdafx.h"
+
+
+#include "iostream"
+#include <stdio.h>
+#include <time.h>
+#include <ctime>
+using namespace std;
+
+void sort(int a[], int n)
+{
+	int i, key, j;
+	for (i = 1; i < n; i++)
+	{
+		key = a[i];
+		j = i - 1;
+		while (j >= 0 && a[j] > key)
+		{
+			a[j + 1] = a[j];
+			j = j - 1;
+		}
+		a[j + 1] = key;
+	}
+}
+
+int main() {
+	clock_t start, end;
+	float total;
+	int seed, num,temp;
+	int arr[100000] = {};
+
+	for (int i = 0; i < 100000; ++i) {
+		num = rand();
+		arr[i] = num;
+	}
+
+	start = clock();
+	sort(arr, 100000);
+	end = clock();
+	total = float(end - start) / CLOCKS_PER_SEC;
+	cout << "\nTotal time for function of sorting random numbers/averge case: " << total << endl;
+
+
+	start = clock();
+	sort(arr, 100000);
+	end = clock();
+	total = float(end - start) / CLOCKS_PER_SEC;
+	cout << "\nTotal time for function of sorting numbers in assending order/best case: " << total << endl;
+	cout << "Please wait!" << endl;
+
+	for (int i = 0; i < 100000; i++)
+	{
+		for (int j = 0; j < 100000 - i; j++)
+		{
+			if (arr[j]<arr[j + 1])
+			{
+				temp = arr[j+1];
+				arr[j+1] = arr[j];
+				arr[j] = temp;
+			}
+		}
+	}
+	cout << "Please wait a little more." << endl;
+	start = clock();
+	sort(arr, 100000);
+	end = clock();
+	total = float(end - start) / CLOCKS_PER_SEC;
+	cout << "\nTotal time for function of sorting numbers in descending order/worst case: " << total << endl;
+
+}
+
