@@ -1,0 +1,180 @@
+
+/*                          RAO NOUMAN AHMAD
+                            Sameer Bin Raees
+							174720
+							131937
+BSCS 6C
+Assignment 5
+Data Structure And Algorithm
+
+*/
+
+
+
+
+#include<iostream>
+#include<fstream>
+#include <sstream>
+#include<string>
+using namespace std;
+
+int present_in_list = 0;
+
+class trie {
+public:
+	char information;
+	string Word_in_list;
+	class trie* pointer_array[256];
+	trie() {
+		for (int i = 0; i<256; i++) {
+			pointer_array[i] = NULL;
+		}
+		information = NULL;
+		Word_in_list = "";
+	}
+};
+
+void insert_in_trie(string element, int position, class trie * root_node) {
+	if (element.length() == position) {
+		root_node->Word_in_list = element;
+		return;
+	}
+	if (root_node->pointer_array[element[position]] == NULL) {
+		trie *node_check;
+		node_check = new trie;
+		node_check->information = element[position];
+		root_node->pointer_array[element[position]] = node_check;
+		insert_in_trie(element, position + 1, root_node->pointer_array[element[position]]);
+	}
+	else
+		insert_in_trie(element, position + 1, root_node->pointer_array[element[position]]);
+}
+
+void search_word(string key_data, int position_in_trie, class trie * root_node) {
+	if ((key_data != root_node->Word_in_list) && (root_node->pointer_array[key_data[position_in_trie]] != NULL))
+		search_word(key_data, position_in_trie + 1, root_node->pointer_array[key_data[position_in_trie]]);
+	else if (key_data == root_node->Word_in_list) {
+		cout << "The spelling of input word '" << root_node->Word_in_list << "' is correct" << endl;
+		present_in_list = 1;
+	}
+}
+int a = 1;
+void print_all_data_in_trie(class trie * root_node) {
+	for (int i = 0; i<256; i++)
+		if (root_node->pointer_array[i] != NULL) {
+			print_all_data_in_trie(root_node->pointer_array[i]);
+		}
+	if (root_node->Word_in_list != "")
+		cout << "    " << root_node->Word_in_list;
+	
+}
+
+void possible_suggestion(string key_data, int position, class trie * root_node) {
+	if ((key_data != root_node->Word_in_list) && (root_node->pointer_array[key_data[position]] != NULL)) {
+		possible_suggestion(key_data, position + 1, root_node->pointer_array[key_data[position]]);
+	}
+	else {
+		print_all_data_in_trie(root_node);
+	}
+}
+
+
+void insert_Word_in_list() {
+	string word2;
+	ofstream OFile_Object;  // Create Object of Ofstream
+	OFile_Object.open("wordlist.txt", ios::app); // Append mode
+	cout << "Enter word you want to add to dictionary.\n";
+	cin >> word2;
+	OFile_Object << endl << word2; // Writing data to file
+	cout << "Data has been appended to file";
+	OFile_Object.close(); // Closing the file
+
+}
+
+
+
+
+
+int main() {
+	int choice=1;
+	cout << "++++++++++++++  Welcome To Trie spell checker ++++++++++++++   : ";
+
+
+ {
+		while (choice != 0) {
+			ifstream in("wordlist.txt");
+			string data, current = "", key;
+			trie *root;
+			root = new trie;
+			cout << "\nEnter 1 to print all elements in trie : ";
+			cout << "\nEnter 2 to search if word is in trie or not : ";
+			cout << "\nEnter 3 to insert word to current trie and also to text file : ";
+			cout << "\nEnter 0 to exit : ";
+			cin >> choice;
+			while (choice != 0 && choice != 1 && choice != 2 && choice != 3)
+			{
+				cout << "\nWrong choice enter only 0 1 2 or 3 : ";
+				cout << "\nEnter 1 to print all elements in trie : ";
+				cout << "\nEnter 2 to search if word is in trie or not : ";
+				cout << "\nEnter 3 to insert word to current trie and also to text file : ";
+				cout << "\nEnter 0 to exit : ";
+				cin >> choice;
+			}
+
+			if (choice == 1)
+			{
+				while (in) {
+					in >> data;
+					insert_in_trie(data, 0, root);
+				}
+				in.close();
+				cout << endl << "\nTrie Construction Successful\n\n" << endl;
+
+				print_all_data_in_trie(root);
+				
+			}
+
+
+			if (choice == 2)
+			{
+
+				while (in) {
+					in >> data;
+					insert_in_trie(data, 0, root);
+				}
+				in.close();
+				cout << endl << "Trie build sucessfully" << endl;
+
+				cout << "Enter the word you want to search : ";
+				cin >> key;
+				search_word(key, 0, root);
+				if (!present_in_list) {
+					cout << endl << "The spelling is incorrect, Possible suggestions are :" << endl;
+					possible_suggestion(key, 0, root);
+				}
+				
+
+			}
+
+			if (choice == 3)
+			{
+				insert_Word_in_list();
+				
+			}
+
+			if (choice == 0)
+			{
+				exit;
+			}
+			cout << endl << endl;
+			system("pause");
+			system("cls");
+
+		}
+
+	} 
+	
+	getchar();
+	getchar();
+	return 0;
+}
